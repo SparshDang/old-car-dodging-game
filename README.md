@@ -4,5 +4,7 @@ As a child, When I am bored I used to play the retro style games like dodge cars
 
 ## Controls
 **<-** :- To move player car left
+
 **->** :- To move player car right
+
 **Space** :- To start the game
