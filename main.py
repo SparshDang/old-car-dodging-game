@@ -67,9 +67,11 @@ class Game:
                 self.__draw_screen()
                 if self.game_start:
                     self.__update_npc_cars()
-                self.__update_screen()
-
                 self.__check_collisions()
+            
+            if not self.game_start or self.game_over:
+                self.__show_front_screen()
+            self.__update_screen()        
             self.clock.tick(FPS)
 
     def __handle_events(self):
@@ -95,6 +97,12 @@ class Game:
         self.player_car.draw(self.game_window)
         self.__draw_npc_cars()
         self.__show_score()
+
+    def __show_front_screen(self):
+        text = self.font.render( "Press Spacebar", True, TEXT_COLOR)
+        text_rect = text.get_rect()
+        coords = ( (WINDOW_WIDTH - text_rect.width)//2, (WINDOW_HEIGHT - text_rect.height)//2  )
+        self.game_window.blit( text, coords)
         
 
     def __draw_npc_cars(self):
