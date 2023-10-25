@@ -16,6 +16,7 @@ PLAYER_CAR_POSITION = ((WINDOW_WIDTH - CAR_WIDTH)//2,
                        (WINDOW_HEIGHT - 50 - CAR_HEIGHT//2))
 PLAYER_COLOR = (255, 0, 0)
 NPC_COLORS = ((255, 255, 0), (0, 255, 0), (0, 0, 255))
+TEXT_COLOR = (255,0,0)
 
 ROAD_MARGIN = 50
 ROAD_WIDTH = WINDOW_WIDTH - 2*ROAD_MARGIN
@@ -35,11 +36,12 @@ class Game:
         self.game_over = False
         self.game_start = False
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont(None, 55)
 
         self.road = Road()
         self.player_car = Car(color=PLAYER_COLOR)
         self.npc_cars = []
-        self.cars_dogded = 0
+        self.cars_dodged = 0
 
         self.__init_npc_cars()
 
@@ -66,6 +68,7 @@ class Game:
                 if self.game_start:
                     self.__update_npc_cars()
                 self.__update_screen()
+
                 self.__check_collisions()
             self.clock.tick(FPS)
 
@@ -91,6 +94,8 @@ class Game:
         self.road.draw(self.game_window)
         self.player_car.draw(self.game_window)
         self.__draw_npc_cars()
+        self.__show_score()
+        
 
     def __draw_npc_cars(self):
         for car in self.npc_cars:
@@ -102,8 +107,12 @@ class Game:
             if cars.get_top() > WINDOW_HEIGHT:
                 del cars
                 self.npc_cars[index] = Car.create_npc_car()
-                self.cars_dogded +=1
-                Car.car_speed = min(5 + self.cars_dogded//10, CAR_TOP_SPEED)
+                self.cars_dodged +=1
+                Car.car_speed = min(5 + self.cars_dodged//10, CAR_TOP_SPEED)
+
+    def __show_score(self):
+        text = self.font.render(f"Cars Dodged : {self.cars_dodged}", True, TEXT_COLOR )
+        self.game_window.blit(text, (0,0))
 
     def __check_collisions(self):
         if self.player_car.collideobjects(self.npc_cars):
@@ -122,7 +131,7 @@ class Game:
 
         self.player_car = Car(color=PLAYER_COLOR)
         self.npc_cars = []
-        self.cars_dogded = 0
+        self.cars_dodged = 0
 
         self.__init_npc_cars()
 
